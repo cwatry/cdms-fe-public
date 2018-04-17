@@ -29,11 +29,6 @@ define([
       'angularFileUpload',				
       'angularCharts',					
 
-      //these are ctuir specific
-      'CrppModule',
-      'AppraisalsModule',
-      'HabitatModule',
-
 	  ])
 	    .config(['$routeProvider', function($routeProvider) {
 
@@ -60,9 +55,6 @@ define([
             $routeProvider.when('/admin-master/:Id', { templateUrl: 'app/core/admin/components/admin-page/templates/admin-master.html', controller: 'AdminEditMasterCtrl' });
             $routeProvider.when('/admin-new-dataset/:Id', { templateUrl: 'app/core/admin/components/admin-page/templates/admin-new-dataset.html', controller: 'AdminNewDatasetCtrl' });
 
-	        //custom routes for datasets that require custom controller+pages
-            $routeProvider.when('/appraisals/:Id', { templateUrl: 'app/private/appraisals/components/appraisal-activities/templates/appraisal-activities.html', controller: 'AppraisalCtrl'});
-            //$routeProvider.when('/crpp/:Id', { templateUrl: 'app/private/crpp/components/crpp-contracts/templates/Crpp-contracts.html', controller: 'CrppContractsCtrl'});
             $routeProvider.when('/unauthorized', { templateUrl: 'app/core/common/templates/unauthorized.html',controller: 'ErrorCtrl'});
 
 	        //when all else fails...

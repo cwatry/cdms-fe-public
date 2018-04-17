@@ -9,6 +9,7 @@
 
     <div>
         <select ui-select2="select2Options" data-placeholder="Add a field" ng-model="SelectedProject" style="width: 300px;">
+            <option value="">-- Select target project --</option>
             <option ng-repeat="project in projects" value="{{project.Id}}">{{project.Name}}</option>
         </select>
     </div>
