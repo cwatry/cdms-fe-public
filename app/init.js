@@ -30,10 +30,6 @@
       'core/datasets/datasets-module',
       'core/admin/admin-module',
       'core/preferences/preferences-module',
-      'private/all-modules',
-      'private/crpp/crpp-module',
-      'private/habitat/habitat-module',
-      'private/appraisals/appraisals-module',
 
     ], function (angular, parser) {
    
