@@ -1238,7 +1238,7 @@
 
 										for(var a = 0; a < row_items.length; a++)
 										{
-											var row_item = row_items[a].trim().toUpperCase();  //KBHERE -- take this off after the upgrade!
+											var row_item = row_items[a].trim();  
 
 											if ((typeof new_row.activityDate !== 'string') &&  (field.FieldRoleId === 1) && (row[field.DbColumnName].indexOf(row_item) == -1))
 											{
@@ -1256,7 +1256,7 @@
 									else if(field.ControlType === "select" && data_row[col] && typeof data_row[col] === "string")
 									{
 										//console.log(" -- " + data_row[col].trim().toUpperCase());
-										new_row[field.DbColumnName] = data_row[col].trim().toUpperCase(); //uppercase select's too....  KBHERE
+										new_row[field.DbColumnName] = data_row[col].trim(); 
 										
 									}
 									else if(field.ControlType == "datetime")
