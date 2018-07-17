@@ -7,5 +7,6 @@ web.config
 *Copy.htm
 *Copy.html
 DataTracker/*
-app/private/*
-.vs/
+*.sln
+.vs/*
+

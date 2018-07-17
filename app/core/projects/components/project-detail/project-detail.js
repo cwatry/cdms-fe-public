@@ -22,6 +22,9 @@ var project_detail = ['$scope', '$routeParams','SubprojectService', 'ProjectServ
         }; 
 		scope.currentUserId = $rootScope.Profile.Id;
         scope.filteredUsers = false;
+        scope.UserIsAdmin = false;
+        scope.UserIsOwner = false;
+        scope.UserIsEditor = false;
         
         scope.metadataList = {};
 
@@ -79,7 +82,7 @@ var project_detail = ['$scope', '$routeParams','SubprojectService', 'ProjectServ
 		scope.DatastoreTablePrefix = $rootScope.DatastoreTablePrefix = "";
 		scope.filesToUpload = {};
 		scope.AuthorizedToViewProject = true;
-
+        scope.grids = {}; // Need this for the tab grids; they will be added to this when those tabs run.
 		
 		// Get the project ID from the url.
 		var theUrl = window.location.href;
@@ -141,6 +144,33 @@ var project_detail = ['$scope', '$routeParams','SubprojectService', 'ProjectServ
             project_watcher();
 
         }, true); //end after project load watcher.
+
+        var user_watcher = scope.$watch('users[0].Id', function () {
+            scope.UserIsAdmin = false;
+            angular.forEach(scope.users, function (user) {
+                console.log("scope.currentUserId = " + scope.currentUserId + ", user.Id = " + user.Id); // + ", " + user.Roles.indexOf("Admin"));
+                if ((user.Id === scope.currentUserId) && (user.Roles.indexOf("Admin") > -1))
+                {
+                    console.log("user is an admin...");
+                    scope.UserIsAdmin = true;
+                }
+
+                // Datasets has loaded by now.
+                for (var i = 0; i < scope.datasets.length; i++) { //look through the datasets for one of ours.
+
+                    //console.log("Woohoo! are we water tempproject?"); //TODO!! don't look at the dataset, look at the project type
+                    //console.dir(scope.project);
+
+                    if (scope.datasets[i].Datastore.TablePrefix === "WaterTemp") {
+                        console.log("Adding instruments to tab bar...");
+                        console.log("scope is next...");
+                        console.dir(scope);
+                        scope.ShowInstruments = true;
+                    }
+                }
+                
+            });
+        }, true); //end after user watcher.
 
 		scope.ShowMap = {
 			Display: false,
@@ -296,6 +326,18 @@ var project_detail = ['$scope', '$routeParams','SubprojectService', 'ProjectServ
             scope.editors = scope.project.Editors;
             scope.users = CommonService.getUsers();
 
+            if (scope.currentUserId === scope.project.OwnerId)
+                scope.UserIsOwner = true;
+
+            angular.forEach(scope.project.Editors, function (editor) {
+                console.log("scope.currentUserId = " + scope.currentUserId + ", editor.Id = " + editor.Id)
+                if (editor.Id === scope.currentUserId)
+                {
+                    console.log("user is an editor...");
+                    scope.UserIsEditor = true;
+                }
+            });
+
             //add in the metadata to our metadataList that came with this dataset
             //console.error("setup the metadata for this project");
 
@@ -304,9 +346,9 @@ var project_detail = ['$scope', '$routeParams','SubprojectService', 'ProjectServ
                 addMetadataProperties(scope.project.Metadata, scope.metadataList, scope, CommonService); //match and add in the values
                 scope.status.DoneLoadingProject = true;
 
-                console.error("loaded values direction for mpd -- we were alrady done...");
-                console.dir(scope.project);
-                console.error(scope.project.MetadataValue[9]);
+                //console.error("loaded values direction for mpd -- we were alrady done...");
+                //console.dir(scope.project);
+                //console.error(scope.project.MetadataValue[9]);
             } else {
                 //only setup the mdp values when we're done loading the whole list...
                 var mdpload_watcher = scope.$watch('status.DoneLoadingMetadata', function () {

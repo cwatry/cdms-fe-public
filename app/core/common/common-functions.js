@@ -817,6 +817,45 @@ function toTimeString(a_date) {
 
 }
 
+function getDateFromDate(a_date)
+{
+    // This function receives a date object, converts it to a string, and returns only the date info.
+    // Example return:  2018-01-02
+    var strYear = "";
+    var strMonth = "";
+    var strDay = "";
+
+	console.log("a_date = " + a_date);
+	console.log("typeof a_date = " + typeof a_date);
+	
+	// When the date comes in from the Data Entry page, a_date is a date object.
+	// When the date comes in from the Date Edit page, a_date is a string.
+	if (typeof a_date !== 'string')
+	{
+		strYear = a_date.getFullYear().toString();
+
+		// Note:  getMonth gives a zero-based month; January is 0.
+		strMonth = (a_date.getMonth() + 1).toString();
+		if (strMonth.length < 2)
+			strMonth = "0" + strMonth;
+
+		strDay = a_date.getDate().toString();
+		if (strDay.length < 2)
+			strDay = "0" + strDay;
+	}
+	else
+	{
+		strYear = a_date.substr(0, 4);
+		strMonth = a_date.substr(5, 2);
+		strDay = a_date.substr(8, 2);
+	}
+
+    console.log("The date = " + strYear + "-" + strMonth + "-" + strDay);
+	//throw "Stopping right here";
+	
+    return strYear + "-" + strMonth + "-" + strDay;
+}
+
 function getTimeFromDate(a_date) {
     var d = a_date.toString();
     //console.log("d = " + d);
@@ -1387,4 +1426,22 @@ function buildDatasetLocationObjectsList(projectLocations, locationType)
     });
 
     return thisDatasetLocationObjects;
+}
+
+//can be used by any valueFormatter to format a date. returns empty string if invalid date
+// @param in_date the date you want to format
+// @param in_format the format you want to use (moment's formatter types) - defaults to M/d/Y
+function valueFormatterDate(in_date, in_format) {
+    the_format = typeof in_format !== 'undefined' ? in_format : 'L'; //default to L type (M/d/Y)
+
+    retval = "";
+
+    if (in_date) {
+        the_date = moment(in_date);
+
+        if (the_date.isValid())
+            retval = the_date.format(the_format);
+    }
+    
+    return retval;
 }
